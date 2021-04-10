@@ -1,10 +1,19 @@
 <template>
   <h1>Google List Emails</h1>
-  <ul>
-    <li v-for="email in emailList" :key="email">
-      {{ email }}
-    </li>
-  </ul>
+  <table>
+    <tr>
+      <th>Domínio</th>
+      <th>Emails</th>
+    </tr>
+    <tr v-for="(domainItems, domainName) in domains" :key="domainName">
+      <td>{{ domainName }}</td>
+      <td>
+        <span v-for="item in domainItems" :key="item">
+          {{ item }}@{{ domainName }}<br />
+        </span>
+      </td>
+    </tr>
+  </table>
 </template>
 
 
@@ -23,17 +32,21 @@ interface IConnections {
   };
   [Symbol.iterator](): any;
 }
+interface IJsonResponse {
+  nextPageToken: string | undefined;
+  connections: IConnections;
+}
 
 export default defineComponent({
   name: "GoogleListEmails",
   data: () => {
-    let data: { emailList: [string] | [] } = {
-      emailList: [],
+    let data: {
+      domains: { [key: string]: [string] | [] };
+    } = {
+      domains: {},
     };
     return data;
   },
-  computed: {},
-
   async mounted() {
     let uri = "https://people.googleapis.com";
     uri += "/v1/people/me/connections?personFields=emailAddresses";
@@ -46,16 +59,18 @@ export default defineComponent({
       if (nextPageToken) localUri += "&pageToken=" + nextPageToken;
 
       const response = await fetch(localUri);
-      const json = await response.json();
+      const json: IJsonResponse = await response.json();
       nextPageToken = json.nextPageToken;
-      const connections: IConnections = json.connections;
 
+      const connections: IConnections = json.connections;
       for (let connection of connections) {
         const emails = connection.emailAddresses;
         if (!emails) continue;
         for (let email of emails) {
-          // ? Insert the email at the end of the emailList
-          this.emailList.splice(this.emailList.length, 0, email.value);
+          const emailAddress: string = email.value;
+          const [user, domain] = emailAddress.split("@");
+          if (!this.domains[domain]) this.domains[domain] = [];
+          this.domains[domain].splice(this.domains[domain].length, 0, user);
         }
       }
     } while (nextPageToken);
@@ -63,5 +78,12 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
+table,
+th,
+td,
+tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
 </style>
