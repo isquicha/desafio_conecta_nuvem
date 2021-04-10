@@ -3,7 +3,6 @@
   <button v-on:click="oauthLogin()">Login com Goole</button><br />
 </template>
 
-
 <script lang="ts">
 import { defineComponent } from "vue";
 const URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -41,5 +40,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
