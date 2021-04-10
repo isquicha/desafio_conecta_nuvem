@@ -6,6 +6,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+interface IConnections {
+  [index: number]: {
+    resourceName: string;
+    etag: string;
+    emailAddresses?: string;
+  };
+  [Symbol.iterator](): any;
+}
+
 export default defineComponent({
   name: "GoogleListEmails",
   async mounted() {
@@ -16,14 +25,6 @@ export default defineComponent({
     const response = await fetch(uri);
     const json = await response.json();
 
-    interface IConnections {
-      [index: number]: {
-        resourceName: string;
-        etag: string;
-        emailAddresses?: string;
-      };
-      [Symbol.iterator](): any;
-    }
     const connections: IConnections = json.connections;
     for (let connection of connections) {
       if (!connection.emailAddresses) continue;
