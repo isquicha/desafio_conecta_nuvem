@@ -1,6 +1,11 @@
 <template>
   <h1>Home page</h1>
-  <button v-on:click="oauthLogin()">Login com Goole</button><br />
+  <button
+    v-on:click="oauthLogin()"
+    class="waves-effect waves-light btn-large red"
+  >
+    Login com Goole</button
+  ><br />
 </template>
 
 <script lang="ts">
