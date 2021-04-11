@@ -1,24 +1,12 @@
 <template>
   <h1>Google List Emails</h1>
-  <table>
-    <tr>
-      <th>Domínio</th>
-      <th>Emails</th>
-    </tr>
-    <tr v-for="(domainItems, domainName) in domains" :key="domainName">
-      <td>{{ domainName }}</td>
-      <td>
-        <span v-for="item in domainItems" :key="item">
-          {{ item }}@{{ domainName }}<br />
-        </span>
-      </td>
-    </tr>
-  </table>
+  <EmailTable :domains="domains" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { IDomains, IJsonResponse, IConnections } from "../interfaces";
+import EmailTable from "../components/EmailTable.vue";
 
 export default defineComponent({
   name: "GoogleListEmails",
@@ -27,6 +15,9 @@ export default defineComponent({
       domains: {},
     };
     return data;
+  },
+  components: {
+    EmailTable,
   },
   created() {
     getEmails(this.$route.params.token, this.domains);
@@ -64,11 +55,4 @@ const getEmails = async (token: string | string[], domainsList: IDomains) => {
 </script>
 
 <style scoped>
-table,
-th,
-td,
-tr {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
 </style>
