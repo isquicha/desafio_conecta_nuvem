@@ -1,6 +1,9 @@
 <template>
-  <h1>Google List Emails</h1>
+  <h1>Domínios e emails na sua conta Google</h1>
   <EmailTable :domains="domains" />
+  <button v-on:click="back()" class="waves-effect waves-light btn-large red">
+    Voltar</button
+  ><br />
 </template>
 
 <script lang="ts">
@@ -15,6 +18,11 @@ export default defineComponent({
       domains: {},
     };
     return data;
+  },
+  methods: {
+    back() {
+      this.$router.go(-2);
+    },
   },
   components: {
     EmailTable,
