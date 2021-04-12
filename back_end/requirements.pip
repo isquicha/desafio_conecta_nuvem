@@ -1,3 +1,4 @@
 Flask==1.1.2
 Pyrebase4==4.4.3
 python-dotenv==0.17.0
+PyJWT==2.0.1
