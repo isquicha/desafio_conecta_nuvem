@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
 from functools import wraps
 from os import getenv
+from time import time
 
 import jwt
+
 # from flask import Flask, request  # noqa
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -92,7 +93,7 @@ def generate_login_token(username: str, password: str) -> bytes:
     token = jwt.encode(
         {
             "username": username,
-            "exp": datetime.utcnow() + timedelta(minutes=30),
+            "exp": time() + (30 * 60),
         },
         key=getenv("SECRET_KEY"),
     )
