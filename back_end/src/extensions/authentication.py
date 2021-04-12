@@ -86,7 +86,6 @@ def generate_login_token(username: str, password: str) -> bytes:
     user_passord = (
         db.child("users").child(username).child("password").get().val()
     )
-    print(f"PASS: {password}\nUSERPASS: {user_passord}\n\n\n")
     if not check_password_hash(user_passord, password):
         raise IncorrectPasswordError()
 
