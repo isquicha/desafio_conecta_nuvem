@@ -18,7 +18,10 @@ class IncorrectPasswordError(Exception):
     pass
 
 
-# TODO: Create token required function
+class AlreadyRegisteredError(Exception):
+    pass
+
+
 def token_required(func: callable) -> callable:
     @wraps(func)
     def inner(*args, **kwargs):
@@ -45,11 +48,11 @@ def create_user(username: str, password: str):
 
     Raises
     ------
-    RuntimeError
+    AlreadyRegisteredError
         If the username is already registered
     """
     if db.child("users").child(username).get().each() is not None:
-        raise RuntimeError("Username already registered!")
+        raise AlreadyRegisteredError("Username already registered!")
 
     hashed_password = generate_password_hash(password)
     db.child("users").child(username).set({"password": hashed_password})
