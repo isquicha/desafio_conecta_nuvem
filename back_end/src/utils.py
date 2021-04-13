@@ -69,10 +69,11 @@ http_status_codes = {
 
 
 def json_response(
-    payload: dict = {},
     status_code: str = "200",
     message: str = None,
     path: str = None,
+    method: str = None,
+    payload: dict = None,
 ) -> dict:
     try:
         int(status_code)
@@ -84,16 +85,19 @@ def json_response(
     response = {
         "timestamp": asctime(gmtime()),
         "status": status_code,
-        "payload": payload,
     }
 
     status_message = http_status_codes.get(status_code)
+    if status_message:
+        response["status_message"] = status_message
 
     if message:
         response["message"] = message
-    if status_message:
-        response["status_message"] = status_message
     if path:
         response["path"] = path
+    if method:
+        response["method"] = method
+    if payload:
+        response["payload"] = payload
 
     return response, status_code
