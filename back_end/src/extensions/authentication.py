@@ -3,11 +3,11 @@ from os import getenv
 from time import time
 
 import jwt
-
-# from flask import Flask, request  # noqa
+from flask import request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .database import db
+from src.utils import json_response
+from src.extensions.database import db
 
 
 class InvalidUserError(Exception):
@@ -23,15 +23,59 @@ class AlreadyRegisteredError(Exception):
 
 
 def token_required(func: callable) -> callable:
+    """Protect a view requiring an access token
+
+    `ATTENTION`: The view must receive **kwargs
+
+    Parameters
+    ----------
+    func : callable
+        The function to be protected
+
+    Returns
+    -------
+    callable
+        The protected function
+    """
+
     @wraps(func)
     def inner(*args, **kwargs):
-        pass
-        # token = request.args.get("access_token", None)
-        # try:
-        #    pass
-        # jwt.decode(token, app.config)
-        # except:
-        #    pass
+        token = request.args.get("access_token", None)
+        if not token:
+            return json_response(
+                status_code=401,
+                message="An access_token parameter must be provided",
+                path=request.full_path,
+                method=request.method,
+            )
+
+        try:
+            token_information = jwt.decode(
+                token, getenv("SECRET_KEY"), algorithms=["HS256"]
+            )
+        except jwt.ExpiredSignatureError:
+            return json_response(
+                status_code=401,
+                message="Expired access_token",
+                path=request.full_path,
+                method=request.method,
+            )
+        except jwt.InvalidTokenError:
+            return json_response(
+                status_code=403,
+                message="Invalid access_token",
+                path=request.full_path,
+                method=request.method,
+            )
+        except Exception:
+            return json_response(
+                status_code=500,
+                message="Error processing access_token",
+                path=request.full_path,
+                method=request.method,
+            )
+
+        return func(*args, **kwargs, token_information=token_information)
 
     return inner
 
