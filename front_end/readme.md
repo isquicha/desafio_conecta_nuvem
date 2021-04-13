@@ -1,29 +1,22 @@
-# front_end
+# Desafio Conecta Nuvem - Front end
 
-## Project setup
-```
-npm install
-```
+## Description
+This is basically a Vue.js 3 api consumer.  
+Project available at https://frontend.desafioconectanuvem.andrevicente.dev.br. 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Requirements
+- node.js (I used v14.16.0)  
+- npm (I used v6.14.11)  
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Installation
+- npm i
 
-### Run your unit tests
-```
-npm run test:unit
-```
+## Running
+- Populate `.env` file as described in [.env.example](.env.example)
+- `npm run serve`
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Production
+- Populate `.env` file as described in [.env.example](.env.example)
+- `npm run build`
+- Copy `dist` folder to NGINX, APACHE or any webserver you want
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
