@@ -131,3 +131,55 @@ class ContactsAPI(MethodView):
             method=request.method,
             payload=payload,
         )
+
+    @token_required
+    def post(self, **kwargs):
+        token_information = kwargs.get("token_information")
+        if token_information is None:
+            return json_response(
+                status_code=500,
+                message="Token information couldn't be verified",
+                path=request.full_path,
+                method=request.method,
+            )
+
+        body = request.get_json()
+        if body is None:
+            return json_response(
+                message="A JSON body must be provided",
+                status_code=400,
+                path=request.full_path,
+                method=request.method,
+            )
+
+        username = token_information.get("username")
+        contact_name = body.get("contact_name", None)
+        if (
+            db.child("users")
+            .child(username)
+            .child("contacts")
+            .child(contact_name)
+            .get()
+            .each()
+            is not None
+        ):
+            return json_response(
+                message=f"Contact {contact_name} already exists",
+                status_code=400,
+                path=request.full_path,
+                method=request.method,
+            )
+
+        emails = body.get("emails", None)
+        if type(emails) == str:
+            emails = [emails]
+        db.child("users").child(username).child("contacts").child(
+            contact_name
+        ).set(emails)
+
+        return json_response(
+            status_code=201,
+            message="",
+            path=request.full_path,
+            method=request.method,
+        )

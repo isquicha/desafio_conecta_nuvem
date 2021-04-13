@@ -14,5 +14,5 @@ def init_app(bp: Blueprint):
     bp.add_url_rule(
         "/contacts/",
         view_func=contacts_view,
-        methods=["GET"],
+        methods=["POST", "GET"],
     )
