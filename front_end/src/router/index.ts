@@ -17,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Google List Emails",
     component: () => import("../views/GoogleListEmails.vue"),
   },
+  {
+    path: "/custom_backend",
+    name: "Custom Backend",
+    component: () => import("../views/CustomBackend.vue"),
+  },
 
 ];
 

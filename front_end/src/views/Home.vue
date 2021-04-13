@@ -5,11 +5,18 @@
     class="waves-effect waves-light btn-large red"
   >
     Login com Goole</button
+  ><br /><br />
+  <button
+    v-on:click="customBackendLogin()"
+    class="waves-effect waves-light btn-large blue"
+  >
+    Login com Back End customizado</button
   ><br />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+
 const URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const SCOPE = "https://www.googleapis.com/auth/contacts.readonly";
 
@@ -36,10 +43,12 @@ export default defineComponent({
   methods: {
     oauthLogin() {
       let uri = URL + "?";
-      console.log(uri);
       for (let parameter in OAUTH_PARAMETERS)
         uri += `&${parameter}=${OAUTH_PARAMETERS[parameter]}`;
       window.location.href = uri;
+    },
+    customBackendLogin() {
+      this.$router.push({ name: "Custom Backend" });
     },
   },
 });

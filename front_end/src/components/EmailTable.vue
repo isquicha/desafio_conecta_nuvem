@@ -1,5 +1,5 @@
 <template>
-  <table class="striped centered red lighten-4">
+  <table class="striped centered lighten-4" :class="color">
     <thead>
       <tr>
         <th>Domínio</th>
@@ -21,10 +21,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import { IDomains } from "../interfaces";
 
 export default defineComponent({
   name: "EmailTable",
-  props: ["domains"],
+  props: {
+    domains: {},
+    color: {
+      default: "red",
+    },
+  },
 });
 </script>
