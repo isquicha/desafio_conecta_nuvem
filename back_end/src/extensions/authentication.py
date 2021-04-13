@@ -42,6 +42,10 @@ def token_required(func: callable) -> callable:
     def inner(*args, **kwargs):
         token = request.args.get("access_token", None)
         if not token:
+            body = request.get_json()
+            if body is not None:
+                token = body.get("access_token", None)
+        if not token:
             return json_response(
                 status_code=401,
                 message="An access_token parameter must be provided",
