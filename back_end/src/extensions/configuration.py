@@ -24,7 +24,7 @@ config = {
 }
 
 extensions = {
-    "DEFAULT": [],
+    "DEFAULT": ["cors"],
     "DEVELOPMENT": [],
     "TESTING": [],
     "PRODUCTION": [],
