@@ -59,9 +59,19 @@ class UserAPI(MethodView):
                 method=request.method,
             )
 
-    def get(self):
+
+class UserTokenAPI(MethodView):
+    def post(self):
         """Tries to get user's access token"""
-        body = request.args
+        body = request.get_json()
+        if body is None:
+            return json_response(
+                message="A JSON body must be provided",
+                status_code=400,
+                path=request.full_path,
+                method=request.method,
+            )
+
         username = body.get("username", None)
         password = body.get("password", None)
 
