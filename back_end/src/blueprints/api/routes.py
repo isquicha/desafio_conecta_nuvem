@@ -8,7 +8,5 @@ def init_app(bp: Blueprint):
     bp.add_url_rule(
         "/users/",
         view_func=user_view,
-        methods=[
-            "POST",
-        ],
+        methods=["POST", "GET"],
     )
